@@ -1,0 +1,10 @@
+モジュールのインストール
+
+conda install -c anaconda python-dotenv
+conda install -c conda-forge openai
+conda install -c conda-forge gunicorn
+conda install -c anaconda flask
+pip install line-bot-sdk
+sudo yum install nginx
+
+上記以外にもpandas等必要になる
