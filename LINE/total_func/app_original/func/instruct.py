@@ -39,57 +39,8 @@ class chat:
                 tech_ana.convert_dict_values_to_str()
                 res = tech_ana.technical_res_gpt()
                 return res
-
-            elif self.module_gpt == "ファンダメンタル分析":#データベースと連携
-                try:
-                    #数値情報取得
-                    scraper = scraping_all_info(code=self.security_code)
-                    num_data = scraper.scraping()
-                    
-                    db = sample_db()
-                    dis = db.fetch_company_dis(company_name=self.company_name)
-                    #データベースに説明があったらそれを返す。無かったら新たに作ってデータベースへ入れる
-                    if dis != None:
-                        #情報をGPTに渡して返答を得る
-                        fun_ana = fundamental_analysis(repo_data=dis,num_data=num_data)
-                        res = fun_ana.fundamental_gpt()
-                        return res
-                    else:
-                        #企業情報取得
-                        directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'func','edinet','edinet_data','openfile',self.docID, 'XBRL', 'PublicDoc')
-                        dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'func','edinet','edinet_data','openfile')
-                        files = os.listdir(dir_path)
-                    
-                        for filename in files:
-                            if filename == self.docID:
-                                target_dir = os.path.join(dir_path, self.docID, "XBRL", "PublicDoc")
-                                target_files = os.listdir(target_dir)
-                                for target_file in target_files:
-                                    if "0102010" in target_file:
-                                        file_path = os.path.join(directory, target_file)
-                                        break
-                            
-                        report = pick_data_from_htm(file_path=file_path)
-                        repo_des = annual_reports_description(data=report)   
-                        repo_data = repo_des.description_gpt()
-                        db.company_dis_to_db(company_name=self.company_name,company_dis=repo_data)
-
-                        #情報をGPTに渡して返答を得る
-                        fun_ana = fundamental_analysis(repo_data=repo_data,num_data=num_data)
-                        res = fun_ana.fundamental_gpt()
-                        return res
-                except:
-                    None
-
-            elif self.module_gpt == "現在の株価":
-                try:
-                    scraper = scraping_all_info(code=self.security_code)
-                    res = scraper.scraping_now_price()
-                    return res
-                except:
-                    None
             
-            elif self.module_gpt == "有価証券報告書の財務分析":
+            elif self.module_gpt == "ファンダメンタル分析":
                 db = sample_db()
                 ana = db.fetch_company_ana(company_name=self.company_name)
                 
