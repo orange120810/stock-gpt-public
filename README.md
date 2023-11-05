@@ -8,6 +8,4 @@
 ・Flask
 ・ユーザーインターフェースはLINE
 
-#補足
-・Langchainも使用
 
